@@ -1,0 +1,223 @@
+[
+    {
+        "id": "edf58a1f.fa568",
+        "type": "tab",
+        "label": "IOT",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8ea19c69.f697c",
+        "type": "mqtt in",
+        "z": "edf58a1f.fa568",
+        "name": "sensor/temperature",
+        "topic": "sensor/temperature",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "ad3f940d.50806",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "e39705fa.3925d8",
+                "cf0ef0d9.5d7598"
+            ]
+        ]
+    },
+    {
+        "id": "e39705fa.3925d8",
+        "type": "debug",
+        "z": "edf58a1f.fa568",
+        "name": "test",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 210,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e89dfdc0.07f408",
+        "type": "http response",
+        "z": "edf58a1f.fa568",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "58421d8.f28d664",
+        "type": "debug",
+        "z": "edf58a1f.fa568",
+        "name": "site page",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 640,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "3cae4185.089eae",
+        "type": "http in",
+        "z": "edf58a1f.fa568",
+        "name": "",
+        "url": "/hello",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 400,
+        "wires": [
+            [
+                "d16388f5.b5965"
+            ]
+        ]
+    },
+    {
+        "id": "d16388f5.b5965",
+        "type": "template",
+        "z": "edf58a1f.fa568",
+        "name": "template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<html>\n    <head></head>\n    <body>\n        <!--<p>This is the payload: {{payload.payload}} !</p>-->\n        <p>This is the payload: {{payload.payload}} !</p>\n    </body>\n</html>",
+        "output": "str",
+        "x": 440,
+        "y": 400,
+        "wires": [
+            [
+                "e89dfdc0.07f408",
+                "58421d8.f28d664"
+            ]
+        ]
+    },
+    {
+        "id": "cf0ef0d9.5d7598",
+        "type": "json",
+        "z": "edf58a1f.fa568",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 160,
+        "wires": [
+            [
+                "41b7d57b.82355c",
+                "5a464dc5.bc19a4"
+            ]
+        ]
+    },
+    {
+        "id": "63c66374.84f504",
+        "type": "debug",
+        "z": "edf58a1f.fa568",
+        "name": "test function value",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 630,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "41b7d57b.82355c",
+        "type": "debug",
+        "z": "edf58a1f.fa568",
+        "name": "test json",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 400,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "80e2356a.3c4a48",
+        "type": "file",
+        "z": "edf58a1f.fa568",
+        "name": "add data to databse",
+        "filename": "/var/www/html/input_from_raspberry.log",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 820,
+        "y": 160,
+        "wires": [
+            [
+                "3d6882f.37842fe"
+            ]
+        ],
+        "icon": "node-red/leveldb.png"
+    },
+    {
+        "id": "5a464dc5.bc19a4",
+        "type": "function",
+        "z": "edf58a1f.fa568",
+        "name": "add timestamp",
+        "func": "var date = new Date();\nvar value  = msg.payload;\nmsg.payload = \"P8__\" + date.toISOString() + \"__\" + value;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 560,
+        "y": 160,
+        "wires": [
+            [
+                "80e2356a.3c4a48",
+                "63c66374.84f504"
+            ]
+        ]
+    },
+    {
+        "id": "3d6882f.37842fe",
+        "type": "debug",
+        "z": "edf58a1f.fa568",
+        "name": "debug database",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ad3f940d.50806",
+        "type": "mqtt-broker",
+        "name": "mqtt_pi",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]
